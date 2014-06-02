@@ -1,6 +1,36 @@
 /*
  * grunt-archive-diff
  * https://github.com/WitteStier/grunt-archive-diff
+ * 
+ * TODO
+ * 
+ * Get the diff between two tags and calculate the differences
+ * and use git archive to export all files with the differences.
+ * 
+ * options
+ * 
+ * OutputDir
+ * diffFilter
+ * 
+ * 
+ * 
+ * 
+ *       gitarchive: {
+ *           update: {
+ *               options: {
+ *                   treeIsh: '<%= archiveOptions.treeIsh %>',
+ *                   output: '../build/update-<%= archiveOptions.treeIsh %>.zip',
+ *                   path: '<%= archiveOptions.paths %>'
+ *               }
+ *           }
+ *       }
+ *       
+ *       
+ *       
+ * ----> TODO
+ * 1. Make git describe a single method and check the outcome.
+ * 2. Make git diff a single method and check the outcome.
+ * 3. Archive the diff outcome.
  *
  * Copyright (c) 2014 WitteStier
  * Licensed under the MIT license.
@@ -8,43 +38,94 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt)
+{
+    // TODO Update title
+    grunt.registerMultiTask('archive_diff', 'The best Grunt plugin ever.', function ()
+    {
+        var options = this.options({
+            diffFilter : 'ACMRTUXB',
+            outputDir : '/',
+            prefix : 'update',
+            format : 'zip' // tar.gz
+        });
+        
+        var done = this.async();
+        
+        var foo = grunt.util.spawn({
+            cmd : 'git',
+            args : [
+                'describe'
+            ]
+        }, done);
+        
+//        console.log(foo);
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
 
-  grunt.registerMultiTask('archive_diff', 'The best Grunt plugin ever.', function() {
-    // Merge task-specific and/or target-specific options with these defaults.
-    var options = this.options({
-      punctuation: '.',
-      separator: ', '
+//        grunt.util.spawn({
+//            
+//        },
+//        function (error, result, code)
+//        {
+//            console.log(arguments);
+//            done();
+//
+//        });
+
+//        /**
+//         * Helper used to find all changes between the last 2 git tags.
+//         *
+//         * @param {Object} grunt
+//         * @param {Function} callback
+//         * @return Void.
+//         */
+//        function archivePahs (callback) {
+//            console.log('test');
+//
+//            grunt.util.spawn({
+//                cmd : 'git',
+//                args : [
+//                    'describe'
+//                ]
+//            },
+//            function (error, result) {
+//                var treeIsh = result.stdout;
+//                console.log('bla');
+////                grunt.config.set('archiveOptions.treeIsh', treeIsh);
+//                grunt.util.spawn({
+//                    cmd : 'git',
+//                    args : [
+//                        'diff',
+//                        '--diff-filter=' + diffFilter,
+//                        '--name-only',
+//                        treeIsh + '^'
+//                    ]
+//                },
+//                callback);
+//            });
+//
+//
+//        }
+//
+//        archivePahs(function (error, result, code)
+//        {
+//            console.log('f');
+//            var paths = result.stdout.split('\n');
+//
+//            console.log(paths);
+//
+//            return 0;
+//        });
+
+
+
+
+        // Run git describe and check if there is a tag name.
+        // Run git diff to get all file names with source changes in the last tag
+        // and his previous tag.
+        // If there are no 2 tags, explain why you cant have a diff.
+        // Run Git archive with the diff filenames as paths.
+
     });
-
-    // Iterate over all specified file groups.
-    this.files.forEach(function(f) {
-      // Concat specified files.
-      var src = f.src.filter(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        } else {
-          return true;
-        }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
-
-      // Handle options.
-      src += options.punctuation;
-
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
-
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
-    });
-  });
 
 };
