@@ -38,6 +38,8 @@
 
 'use strict';
 
+var async = require('async');
+
 module.exports = function (grunt)
 {
     // TODO Update title
@@ -49,83 +51,99 @@ module.exports = function (grunt)
             prefix : 'update',
             format : 'zip' // tar.gz
         });
-        
+        var treeIsh;
+        var path;
+
         var done = this.async();
-        
-        var foo = grunt.util.spawn({
-            cmd : 'git',
-            args : [
-                'describe'
-            ]
-        }, done);
-        
-//        console.log(foo);
 
+        /**
+         * Run git describe to get the last git tag.
+         * 
+         * @param {Function} callback
+         * @return {Void}
+         */
+        function describe (callback)
+        {
+            grunt.log.debug('Find last Git tag.');
 
-//        grunt.util.spawn({
-//            
-//        },
-//        function (error, result, code)
-//        {
-//            console.log(arguments);
-//            done();
-//
-//        });
+            grunt.util.spawn({
+                cmd : 'git',
+                args : [
+                    'describe'
+                ]
+            },
+            callback);
 
-//        /**
-//         * Helper used to find all changes between the last 2 git tags.
-//         *
-//         * @param {Object} grunt
-//         * @param {Function} callback
-//         * @return Void.
-//         */
-//        function archivePahs (callback) {
-//            console.log('test');
-//
-//            grunt.util.spawn({
-//                cmd : 'git',
-//                args : [
-//                    'describe'
-//                ]
-//            },
-//            function (error, result) {
-//                var treeIsh = result.stdout;
-//                console.log('bla');
-////                grunt.config.set('archiveOptions.treeIsh', treeIsh);
-//                grunt.util.spawn({
-//                    cmd : 'git',
-//                    args : [
-//                        'diff',
-//                        '--diff-filter=' + diffFilter,
-//                        '--name-only',
-//                        treeIsh + '^'
-//                    ]
-//                },
-//                callback);
-//            });
-//
-//
-//        }
-//
-//        archivePahs(function (error, result, code)
-//        {
-//            console.log('f');
-//            var paths = result.stdout.split('\n');
-//
-//            console.log(paths);
-//
-//            return 0;
-//        });
+            // End.
+        }
 
+        /**
+         * Run git diff to get the filename of the changed files.
+         * 
+         * @param {Object} result
+         * @param {Number} code
+         * @param {Function} callback
+         * @return {Void}
+         */
+        function diff (result, code, callback)
+        {
+            grunt.log.debug('Find filnames of changed files.');
 
+            treeIsh = result.toString();
 
+            grunt.util.spawn({
+                cmd : 'git',
+                args : [
+                    'diff',
+                    '--diff-filter=' + options.diffFilter,
+                    '--name-only',
+                    treeIsh + '^'
+                ]
+            },
+            callback);
 
-        // Run git describe and check if there is a tag name.
-        // Run git diff to get all file names with source changes in the last tag
-        // and his previous tag.
-        // If there are no 2 tags, explain why you cant have a diff.
-        // Run Git archive with the diff filenames as paths.
+            // End.
+        }
 
+        /**
+         * Run git archive to archive the changed files.
+         * 
+         * @param {Object} error
+         * @param {Object} result
+         * @param {Number} code
+         * @return {Number} Exit code.
+         */
+        function archive (error, result, code)
+        {
+            grunt.log.debug('Archive changed files.');
+
+            if (error) {
+                grunt.fail.fatal(error, code);
+            }
+
+            path = result.toString().split('\n');
+
+            var args = [
+                'archive',
+                '--output=./update-' + treeIsh + '.zip',
+                treeIsh + '^'
+            ].concat(path);
+
+            grunt.util.spawn({
+                cmd : 'git',
+                args : args
+            },
+            done);
+
+            return 1;
+        }
+
+        async.waterfall([
+            describe,
+            diff
+        ], archive);
+
+        // End.
     });
 
 };

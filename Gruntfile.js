@@ -30,22 +30,14 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     archive_diff: {
-      default_options: {
-        options: {
-        },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
+        archive : {
+            options: {
+                diffFilter : 'ACMRTUXB',
+                outputDir : '/',
+                prefix : 'update',
+                format : 'zip' // tar.gz
+            }
         }
-      },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!'
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      }
     },
 
     // Unit tests.
@@ -68,6 +60,6 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['clean', 'archive_diff', 'nodeunit']);
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
+  grunt.registerTask('default', ['archive_diff']);
 
 };
