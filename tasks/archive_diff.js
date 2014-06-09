@@ -12,7 +12,6 @@ var async = require('async');
 
 module.exports = function (grunt)
 {
-    // TODO Update title
     grunt.registerMultiTask('archive_diff', 'A Grunt plugin to export a git diff archive.', function ()
     {
         var options = this.options({
@@ -115,6 +114,7 @@ module.exports = function (grunt)
         ], archive);
 
         // End.
+        return 0;
     });
 
 };
