@@ -1,6 +1,7 @@
 # grunt-archive-diff
 
-> The best Grunt plugin ever.
+> A Grunt plugin to export a git diff archive.  
+  Differences are calculated between the last two tags.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`
@@ -37,48 +38,64 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.diffFilter
 Type: `String`
-Default value: `',  '`
+Default value: `'ACMRTUXB'`
 
-A string value that is used to do something with whatever.
+Select only files that are Added (A), Copied (C), Deleted (D), Modified (M), Renamed (R), have their type (i.e. regular file, symlink, submodule, …) changed (T), are Unmerged (U), are Unknown (X), or have had their pairing Broken (B).
 
-#### options.punctuation
+`$ git diff --diff-filter`
+
+#### options.outputDir
 Type: `String`
 Default value: `'.'`
 
-A string value that is used to do something else with whatever else.
+Archive export destination directory.
+
+#### options.prefix
+Type: `String`
+Default value: `''`
+
+Archive filename prefix.  
+_(Notice: The tag name will be used an suffix.)_
+
+#### options.format
+Type: `String`
+Default value: `'zip'`
+
+Format of the resulting archive: tar or zip.
+
+`$ git archive --format`
 
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
 
 ```js
 grunt.initConfig({
-  archive_diff: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
+    archive : {
+        options: {
+            diffFilter : 'ACMRTUXB',
+            outputDir : '.',
+            prefix : 'update',
+            format : 'zip'
+        }
+    }
 });
 ```
 
 #### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
 
 ```js
 grunt.initConfig({
-  archive_diff: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
+    archive : {
+        options: {
+            diffFilter : 'A',
+            outputDir : './new',
+            prefix : 'new-in-',
+            format : 'tar.gz'
+        }
+    }
 });
 ```
 

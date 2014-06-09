@@ -33,7 +33,7 @@ module.exports = function(grunt) {
         archive : {
             options: {
                 diffFilter : 'ACMRTUXB',
-                outputDir : '/',
+                outputDir : '.',
                 prefix : 'update',
                 format : 'zip' // tar.gz
             }

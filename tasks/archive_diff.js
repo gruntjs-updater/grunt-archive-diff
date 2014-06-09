@@ -1,36 +1,6 @@
 /*
  * grunt-archive-diff
  * https://github.com/WitteStier/grunt-archive-diff
- * 
- * TODO
- * 
- * Get the diff between two tags and calculate the differences
- * and use git archive to export all files with the differences.
- * 
- * options
- * 
- * OutputDir
- * diffFilter
- * 
- * 
- * 
- * 
- *       gitarchive: {
- *           update: {
- *               options: {
- *                   treeIsh: '<%= archiveOptions.treeIsh %>',
- *                   output: '../build/update-<%= archiveOptions.treeIsh %>.zip',
- *                   path: '<%= archiveOptions.paths %>'
- *               }
- *           }
- *       }
- *       
- *       
- *       
- * ----> TODO
- * 1. Make git describe a single method and check the outcome.
- * 2. Make git diff a single method and check the outcome.
- * 3. Archive the diff outcome.
  *
  * Copyright (c) 2014 WitteStier
  * Licensed under the MIT license.
@@ -43,18 +13,18 @@ var async = require('async');
 module.exports = function (grunt)
 {
     // TODO Update title
-    grunt.registerMultiTask('archive_diff', 'The best Grunt plugin ever.', function ()
+    grunt.registerMultiTask('archive_diff', 'A Grunt plugin to export a git diff archive.', function ()
     {
         var options = this.options({
             diffFilter : 'ACMRTUXB',
-            outputDir : '/',
-            prefix : 'update',
+            outputDir : '.',
+            prefix : '',
             format : 'zip' // tar.gz
         });
-        var treeIsh;
-        var path;
 
-        var done = this.async();
+        var done = this.async(),
+            treeIsh,
+            path;
 
         /**
          * Run git describe to get the last git tag.
@@ -125,7 +95,8 @@ module.exports = function (grunt)
 
             var args = [
                 'archive',
-                '--output=./update-' + treeIsh + '.zip',
+                '--format=' + options.format,
+                '--output=' + options.outputDir + '/' + options.prefix + treeIsh + '.' + options.format,
                 treeIsh + '^'
             ].concat(path);
 
