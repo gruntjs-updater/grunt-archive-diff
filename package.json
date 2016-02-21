@@ -1,44 +1,44 @@
 {
-    "name" : "grunt-archive-diff",
-    "description" : "A Grunt plugin to export a git diff archive.",
-    "version" : "0.1.0",
-    "homepage" : "https://github.com/WitteStier/grunt-archive-diff",
-    "author" : {
-        "name" : "WitteStier",
-        "email" : "development@wittestier.nl"
+    "name": "grunt-archive-diff",
+    "description": "A Grunt plugin to export a git diff archive.",
+    "version": "0.1.0",
+    "homepage": "https://github.com/WitteStier/grunt-archive-diff",
+    "author": {
+        "name": "WitteStier",
+        "email": "development@wittestier.nl"
     },
-    "repository" : {
-        "type" : "git",
-        "url" : "https://github.com/WitteStier/grunt-archive-diff.git"
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/WitteStier/grunt-archive-diff.git"
     },
-    "bugs" : {
-        "url" : "https://github.com/WitteStier/grunt-archive-diff/issues"
+    "bugs": {
+        "url": "https://github.com/WitteStier/grunt-archive-diff/issues"
     },
-    "licenses" : [
+    "licenses": [
         {
-            "type" : "MIT",
-            "url" : "https://github.com/WitteStier/grunt-archive-diff/blob/master/LICENSE-MIT"
+            "type": "MIT",
+            "url": "https://github.com/WitteStier/grunt-archive-diff/blob/master/LICENSE-MIT"
         }
     ],
-    "engines" : {
-        "node" : ">= 0.8.0"
+    "engines": {
+        "node": ">= 0.8.0"
     },
-    "scripts" : {
-        "test" : "grunt test"
+    "scripts": {
+        "test": "grunt test"
     },
-    "dependencies" : {
-        "async" : "~0.2.9"
+    "dependencies": {
+        "async": "~0.2.9"
     },
-    "devDependencies" : {
-        "grunt-contrib-jshint" : "^0.9.2",
-        "grunt-contrib-clean" : "^0.5.0",
-        "grunt-contrib-nodeunit" : "^0.3.3",
-        "grunt" : "~0.4.5"
+    "devDependencies": {
+        "grunt-contrib-jshint": "^0.9.2",
+        "grunt-contrib-clean": "^0.5.0",
+        "grunt-contrib-nodeunit": "^0.3.3",
+        "grunt": "~0.4.5"
     },
-    "peerDependencies" : {
-        "grunt" : "~0.4.5"
+    "peerDependencies": {
+        "grunt": ">=0.4.0"
     },
-    "keywords" : [
+    "keywords": [
         "gruntplugin"
     ]
 }
